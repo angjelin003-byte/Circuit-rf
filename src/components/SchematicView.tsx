@@ -20,37 +20,37 @@ export const SchematicView: React.FC<SchematicViewProps> = ({
   z0 = 50,
 }) => {
   return (
-    <div className="flex flex-col rounded-2xl bg-slate-950 border border-slate-800/80 p-3 shadow-xl select-none">
+    <div className="flex flex-col rounded-xl bg-slate-950 border border-slate-800/80 p-2.5 shadow-lg select-none">
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-slate-800/60 text-xs">
-        <div className="flex items-center gap-1.5 font-bold tracking-wider text-slate-100 uppercase text-[11px]">
-          <Activity className="w-4 h-4 text-sky-400" />
-          <span>Schematic & Real-Time Tuning</span>
+      <div className="flex items-center justify-between pb-1.5 border-b border-slate-800/60 text-xs">
+        <div className="flex items-center gap-1.5 font-bold tracking-wider text-slate-100 uppercase text-[10px]">
+          <Activity className="w-3.5 h-3.5 text-sky-400" />
+          <span>Schematic & Live Tuning</span>
         </div>
 
         {/* Quick Add Dropdown / Button */}
         <div className="flex items-center gap-1">
           <button
             onClick={() => onAddComponent('capacitor_series')}
-            className="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-sky-400 border border-slate-800 text-[10px] font-mono cursor-pointer"
+            className="px-1.5 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-sky-400 border border-slate-800 text-[9px] font-mono cursor-pointer"
           >
             +C
           </button>
           <button
             onClick={() => onAddComponent('inductor_series')}
-            className="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-slate-800 text-[10px] font-mono cursor-pointer"
+            className="px-1.5 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-slate-800 text-[9px] font-mono cursor-pointer"
           >
             +L
           </button>
           <button
             onClick={() => onAddComponent('transmission_line')}
-            className="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-amber-400 border border-slate-800 text-[10px] font-mono cursor-pointer"
+            className="px-1.5 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-amber-400 border border-slate-800 text-[9px] font-mono cursor-pointer"
           >
             +TLine
           </button>
           <button
             onClick={() => onAddComponent('open_stub')}
-            className="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-purple-400 border border-slate-800 text-[10px] font-mono cursor-pointer"
+            className="px-1.5 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-purple-400 border border-slate-800 text-[9px] font-mono cursor-pointer"
           >
             +Stub
           </button>
@@ -58,85 +58,85 @@ export const SchematicView: React.FC<SchematicViewProps> = ({
       </div>
 
       {/* Visual Cascade Flow */}
-      <div className="my-2.5 p-2 rounded-xl bg-slate-900/60 border border-slate-800/80 overflow-x-auto scrollbar-thin">
-        <div className="flex items-center gap-1 min-w-max py-1">
+      <div className="my-1.5 p-1.5 rounded-lg bg-slate-900/60 border border-slate-800/80 overflow-x-auto scrollbar-thin">
+        <div className="flex items-center gap-1 min-w-max py-0.5">
           {/* Port 1 Source */}
-          <div className="flex flex-col items-center justify-center w-14 h-14 rounded-lg bg-sky-950/80 border border-sky-800 text-center shrink-0">
-            <span className="text-[10px] font-bold text-sky-300">PORT 1</span>
-            <span className="text-[9px] font-mono text-slate-400">{z0}Ω</span>
+          <div className="flex flex-col items-center justify-center w-11 h-11 rounded-md bg-sky-950/80 border border-sky-800 text-center shrink-0">
+            <span className="text-[9px] font-bold text-sky-300">PORT 1</span>
+            <span className="text-[8px] font-mono text-slate-400">{z0}Ω</span>
           </div>
 
-          <div className="w-4 h-0.5 bg-sky-500/60" />
+          <div className="w-3 h-0.5 bg-sky-500/60" />
 
           {/* Cascaded Components */}
           {components.map((comp, idx) => (
             <React.Fragment key={`block-${comp.id}`}>
               <div
-                className={`flex flex-col items-center justify-center p-2 rounded-xl border text-center transition min-w-[76px] h-14 shrink-0 ${
+                className={`flex flex-col items-center justify-center p-1 rounded-md border text-center transition min-w-[62px] h-11 shrink-0 ${
                   comp.enabled
-                    ? 'bg-slate-900 border-slate-700 shadow-sm'
+                    ? 'bg-slate-900 border-slate-700 shadow-xs'
                     : 'bg-slate-950/40 border-slate-800 opacity-40'
                 }`}
               >
-                <span className="text-[10px] font-bold text-slate-200 truncate max-w-[68px]">
+                <span className="text-[9px] font-bold text-slate-200 truncate max-w-[58px]">
                   {comp.name.split(' ')[0]}
                 </span>
-                <span className="text-[11px] font-mono font-bold text-sky-400">
+                <span className="text-[10px] font-mono font-bold text-sky-400">
                   {comp.value} {comp.unit}
                 </span>
               </div>
 
-              {idx < components.length - 1 && <div className="w-3 h-0.5 bg-slate-700 shrink-0" />}
+              {idx < components.length - 1 && <div className="w-2.5 h-0.5 bg-slate-700 shrink-0" />}
             </React.Fragment>
           ))}
 
-          <div className="w-4 h-0.5 bg-emerald-500/60" />
+          <div className="w-3 h-0.5 bg-emerald-500/60" />
 
           {/* Port 2 Load */}
-          <div className="flex flex-col items-center justify-center w-14 h-14 rounded-lg bg-emerald-950/80 border border-emerald-800 text-center shrink-0">
-            <span className="text-[10px] font-bold text-emerald-300">PORT 2</span>
-            <span className="text-[9px] font-mono text-slate-400">{z0}Ω</span>
+          <div className="flex flex-col items-center justify-center w-11 h-11 rounded-md bg-emerald-950/80 border border-emerald-800 text-center shrink-0">
+            <span className="text-[9px] font-bold text-emerald-300">PORT 2</span>
+            <span className="text-[8px] font-mono text-slate-400">{z0}Ω</span>
           </div>
         </div>
       </div>
 
       {/* Component Tuning Card List */}
-      <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
+      <div className="space-y-1.5 max-h-[320px] overflow-y-auto pr-1">
         {components.map((comp) => (
           <div
             key={comp.id}
-            className={`p-2.5 rounded-xl border transition ${
+            className={`p-2 rounded-lg border transition ${
               comp.enabled
                 ? 'bg-slate-900/80 border-slate-800'
                 : 'bg-slate-950/50 border-slate-900 opacity-50'
             }`}
           >
-            <div className="flex items-center justify-between mb-1.5">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => onToggleComponent(comp.id)}
                   className="cursor-pointer text-slate-400 hover:text-white"
                   title="Enable/Disable Component"
                 >
                   {comp.enabled ? (
-                    <ToggleRight className="w-5 h-5 text-sky-400" />
+                    <ToggleRight className="w-4 h-4 text-sky-400" />
                   ) : (
-                    <ToggleLeft className="w-5 h-5 text-slate-600" />
+                    <ToggleLeft className="w-4 h-4 text-slate-600" />
                   )}
                 </button>
-                <span className="text-xs font-semibold text-slate-200">{comp.name}</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 font-mono">
+                <span className="text-[11px] font-semibold text-slate-200">{comp.name}</span>
+                <span className="text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-400 font-mono">
                   {comp.type.replace('_', ' ')}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-sky-400">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] font-mono font-bold text-sky-400">
                   {comp.value} {comp.unit}
                 </span>
                 <button
                   onClick={() => onDeleteComponent(comp.id)}
-                  className="p-1 rounded text-slate-500 hover:text-rose-400 hover:bg-slate-800 cursor-pointer"
+                  className="p-0.5 rounded text-slate-500 hover:text-rose-400 hover:bg-slate-800 cursor-pointer"
                   title="Delete element"
                 >
                   <Trash2 className="w-3.5 h-3.5" />

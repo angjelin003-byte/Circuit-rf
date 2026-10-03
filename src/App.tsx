@@ -10,8 +10,7 @@ import { LoadpullEngine } from './engine/loadpullSolver';
 import { MatchingSolution } from './engine/matchingSynthesizer';
 import { MobileHeader } from './components/MobileHeader';
 import { MobileBottomNav, ActiveTab } from './components/MobileBottomNav';
-import { SchematicView } from './components/SchematicView';
-import { SmithChart } from './components/SmithChart';
+import { CircuitSmithPanel } from './components/CircuitSmithPanel';
 import { SParametersView } from './components/SParametersView';
 import { HarmonicBalanceView } from './components/HarmonicBalanceView';
 import { MicrostripView } from './components/MicrostripView';
@@ -29,7 +28,7 @@ export default function App() {
   const [markerFreqMHz, setMarkerFreqMHz] = useState<number>(CIRCUIT_PRESETS[0].centerFreqMHz);
 
   // Active navigation tab
-  const [activeTab, setActiveTab] = useState<ActiveTab>('smith');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('circuit-smith');
 
   // Modals state
   const [isMatchingOpen, setIsMatchingOpen] = useState(false);
@@ -161,7 +160,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-sans selection:bg-sky-500 selection:text-white pb-20">
+    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-sans selection:bg-sky-500 selection:text-white pb-14">
       <OfflineIndicator />
 
       {/* Header */}
@@ -174,18 +173,18 @@ export default function App() {
       />
 
       {/* Circuit Description & Quick Center Info Banner */}
-      <div className="bg-slate-900/50 border-b border-slate-800/60 px-3 py-2 text-xs">
-        <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
+      <div className="bg-slate-900/60 border-b border-slate-800/60 px-2.5 py-1 text-[11px]">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 text-slate-300 truncate">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
             <span className="truncate">{currentPreset.description}</span>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0 font-mono text-[11px]">
+          <div className="flex items-center gap-1.5 shrink-0 font-mono text-[10px]">
             <span className="text-slate-400">
-              f₀: <strong className="text-sky-300">{(markerFreqMHz / 1000).toFixed(2)} GHz</strong>
+              f₀: <strong className="text-sky-300">{(markerFreqMHz / 1000).toFixed(2)}GHz</strong>
             </span>
-            <span className="text-slate-500">|</span>
+            <span className="text-slate-600">|</span>
             <span className="text-slate-400">
               Z₀: <strong className="text-emerald-300">{sweep.z0}Ω</strong>
             </span>
@@ -194,14 +193,19 @@ export default function App() {
       </div>
 
       {/* Main View Area */}
-      <main className="flex-1 max-w-4xl w-full mx-auto p-3 space-y-3">
+      <main className="flex-1 max-w-5xl w-full mx-auto p-2 sm:p-2.5 space-y-2">
         {/* Render Tab Views */}
-        {activeTab === 'smith' && (
-          <SmithChart
+        {activeTab === 'circuit-smith' && (
+          <CircuitSmithPanel
+            components={components}
+            onUpdateComponent={handleUpdateComponent}
+            onToggleComponent={handleToggleComponent}
+            onAddComponent={handleAddComponent}
+            onDeleteComponent={handleDeleteComponent}
+            z0={sweep.z0}
             sPoints={sPoints}
             markerFreqMHz={markerFreqMHz}
             onMarkerFreqChange={setMarkerFreqMHz}
-            z0={sweep.z0}
             loadpullResult={loadpullResult}
             matchingSolution={selectedMatchingSol}
           />
@@ -212,17 +216,6 @@ export default function App() {
             sPoints={sPoints}
             markerFreqMHz={markerFreqMHz}
             onMarkerFreqChange={setMarkerFreqMHz}
-            z0={sweep.z0}
-          />
-        )}
-
-        {activeTab === 'schematic' && (
-          <SchematicView
-            components={components}
-            onUpdateComponent={handleUpdateComponent}
-            onToggleComponent={handleToggleComponent}
-            onAddComponent={handleAddComponent}
-            onDeleteComponent={handleDeleteComponent}
             z0={sweep.z0}
           />
         )}
@@ -255,7 +248,7 @@ export default function App() {
         onApplySolution={handleApplyMatching}
         onSelectSolutionForSmith={(sol) => {
           setSelectedMatchingSol(sol);
-          setActiveTab('smith');
+          setActiveTab('circuit-smith');
           setIsMatchingOpen(false);
         }}
       />

@@ -42,11 +42,11 @@ export const SmithChart: React.FC<SmithChartProps> = ({
   // Free touch-probe cursor
   const [freeCursor, setFreeCursor] = useState<{ u: number; v: number } | null>(null);
 
-  // SVG chart geometry
-  const size = 360;
+  // SVG chart geometry (compact footprint)
+  const size = 310;
   const cx = size / 2;
   const cy = size / 2;
-  const radius = (size / 2) - 24;
+  const radius = (size / 2) - 18;
 
   // Find nearest S-point to marker frequency
   const currentPoint = useMemo(() => {
@@ -224,19 +224,19 @@ export const SmithChart: React.FC<SmithChartProps> = ({
   }, [freeCursor, cx, cy, radius]);
 
   return (
-    <div className={`flex flex-col rounded-2xl bg-slate-950 border border-slate-800/80 p-3 shadow-xl overflow-hidden select-none ${className}`}>
+    <div className={`flex flex-col rounded-xl bg-slate-950 border border-slate-800/80 p-2.5 shadow-lg overflow-hidden select-none ${className}`}>
       {/* Top Header & Layer Toggles */}
-      <div className="flex items-center justify-between pb-2 border-b border-slate-800/60 text-xs">
-        <div className="flex items-center gap-2">
-          <Compass className="w-4 h-4 text-sky-400" />
-          <span className="font-bold tracking-wider text-slate-100 uppercase text-[11px]">Smith Chart (Z0={z0}Ω)</span>
+      <div className="flex items-center justify-between pb-1.5 border-b border-slate-800/60 text-xs">
+        <div className="flex items-center gap-1.5">
+          <Compass className="w-3.5 h-3.5 text-sky-400" />
+          <span className="font-bold tracking-wider text-slate-100 uppercase text-[10px]">Smith Chart (Z0={z0}Ω)</span>
         </div>
 
         {/* Toolbar Toggles */}
         <div className="flex items-center gap-1">
           <button
             onClick={() => setShowAdmittance(!showAdmittance)}
-            className={`px-2 py-0.5 rounded text-[10px] font-semibold transition cursor-pointer ${
+            className={`px-1.5 py-0.5 rounded text-[9px] font-semibold transition cursor-pointer ${
               showAdmittance
                 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                 : 'bg-slate-800/60 text-slate-400 hover:text-slate-200'
@@ -247,7 +247,7 @@ export const SmithChart: React.FC<SmithChartProps> = ({
           </button>
           <button
             onClick={() => setShowQCurves(!showQCurves)}
-            className={`px-2 py-0.5 rounded text-[10px] font-semibold transition cursor-pointer ${
+            className={`px-1.5 py-0.5 rounded text-[9px] font-semibold transition cursor-pointer ${
               showQCurves
                 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                 : 'bg-slate-800/60 text-slate-400 hover:text-slate-200'
@@ -259,7 +259,7 @@ export const SmithChart: React.FC<SmithChartProps> = ({
           {loadpullResult && (
             <button
               onClick={() => setShowLoadpull(!showLoadpull)}
-              className={`px-2 py-0.5 rounded text-[10px] font-semibold transition cursor-pointer ${
+              className={`px-1.5 py-0.5 rounded text-[9px] font-semibold transition cursor-pointer ${
                 showLoadpull
                   ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                   : 'bg-slate-800/60 text-slate-400 hover:text-slate-200'
@@ -272,11 +272,11 @@ export const SmithChart: React.FC<SmithChartProps> = ({
           {freeCursor && (
             <button
               onClick={() => setFreeCursor(null)}
-              className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400 text-[10px] flex items-center gap-1 hover:bg-sky-500/30"
+              className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400 text-[9px] flex items-center gap-1 hover:bg-sky-500/30"
               title="Reset to S11 Marker"
             >
               <RotateCcw className="w-2.5 h-2.5" />
-              <span>Snap S11</span>
+              <span>Snap</span>
             </button>
           )}
         </div>
@@ -556,30 +556,30 @@ export const SmithChart: React.FC<SmithChartProps> = ({
 
       {/* Interactive Readout HUD */}
       {markerImpedance && (
-        <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs">
-          <div className="space-y-1">
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <Crosshair className="w-3 h-3 text-sky-400" />
-              <span>{markerImpedance.isCustom ? 'Touch Probe Impedance' : `Marker @ ${markerFreqMHz.toFixed(0)} MHz`}</span>
+        <div className="grid grid-cols-2 gap-1.5 p-2 rounded-lg bg-slate-900/90 border border-slate-800 text-[11px]">
+          <div className="space-y-0.5">
+            <div className="text-[9px] text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <Crosshair className="w-2.5 h-2.5 text-sky-400" />
+              <span>{markerImpedance.isCustom ? 'Touch Probe' : `@ ${markerFreqMHz.toFixed(0)} MHz`}</span>
             </div>
-            <div className="font-mono text-sm font-bold text-sky-300">
+            <div className="font-mono text-xs font-bold text-sky-300">
               {markerImpedance.r.toFixed(1)} {markerImpedance.x >= 0 ? '+' : '-'} j{Math.abs(markerImpedance.x).toFixed(1)} Ω
             </div>
-            <div className="text-[11px] text-slate-300 font-mono">
+            <div className="text-[10px] text-slate-300 font-mono">
               Y = {markerImpedance.yRealMs.toFixed(1)} {markerImpedance.yImagMs >= 0 ? '+' : '-'} j{Math.abs(markerImpedance.yImagMs).toFixed(1)} mS
             </div>
           </div>
 
-          <div className="space-y-1 text-right">
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider">Reflection & VSWR</div>
-            <div className="font-mono text-xs font-semibold text-emerald-300">
-              |Γ| = {markerImpedance.mag.toFixed(3)} ∠ {markerImpedance.angDeg.toFixed(1)}°
+          <div className="space-y-0.5 text-right">
+            <div className="text-[9px] text-slate-400 uppercase tracking-wider">Reflection & VSWR</div>
+            <div className="font-mono text-[11px] font-semibold text-emerald-300">
+              |Γ|={markerImpedance.mag.toFixed(3)} ∠{markerImpedance.angDeg.toFixed(1)}°
             </div>
-            <div className="text-[11px] text-slate-300 font-mono">
-              VSWR: <span className="font-bold text-white">{markerImpedance.vswr.toFixed(2)}</span> | RL: <span className="font-bold text-white">{markerImpedance.returnLossDb.toFixed(1)} dB</span>
+            <div className="text-[10px] text-slate-300 font-mono">
+              VSWR: <span className="font-bold text-white">{markerImpedance.vswr.toFixed(2)}</span> | RL: <span className="font-bold text-white">{markerImpedance.returnLossDb.toFixed(1)}dB</span>
             </div>
             {markerImpedance.eqElem && (
-              <div className="text-[10px] text-sky-400 font-mono font-medium">
+              <div className="text-[9px] text-sky-400 font-mono font-medium">
                 Eq: {markerImpedance.eqElem}
               </div>
             )}
@@ -589,8 +589,8 @@ export const SmithChart: React.FC<SmithChartProps> = ({
 
       {/* Frequency Scrub Slider */}
       {sPoints.length > 0 && (
-        <div className="mt-2.5 pt-2 border-t border-slate-800/60 flex items-center gap-2">
-          <span className="text-[10px] text-slate-400 font-mono shrink-0">
+        <div className="mt-1.5 pt-1 border-t border-slate-800/60 flex items-center gap-1.5">
+          <span className="text-[9px] text-slate-400 font-mono shrink-0">
             {sPoints[0].freqMHz.toFixed(0)}M
           </span>
           <input
@@ -600,9 +600,9 @@ export const SmithChart: React.FC<SmithChartProps> = ({
             step={(sPoints[sPoints.length - 1].freqMHz - sPoints[0].freqMHz) / (sPoints.length - 1)}
             value={markerFreqMHz}
             onChange={(e) => onMarkerFreqChange(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-400"
+            className="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer accent-sky-400"
           />
-          <span className="text-[10px] text-slate-400 font-mono shrink-0">
+          <span className="text-[9px] text-slate-400 font-mono shrink-0">
             {sPoints[sPoints.length - 1].freqMHz.toFixed(0)}M
           </span>
         </div>
