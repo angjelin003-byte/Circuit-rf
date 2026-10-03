@@ -6,3 +6,10 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Keep Gradle wrapper executable and jar
+!gradlew
+!gradlew.bat
+!android/gradlew
+!android/gradlew.bat
+!android/gradle/wrapper/gradle-wrapper.jar

@@ -46,20 +46,29 @@ jobs:
       - name: Build Web Application
         run: npm run build
 
-      - name: Sync Capacitor Android Project
-        run: npx cap sync android
-
-      - name: Accept Android Licenses (Fallback if needed)
+      - name: Prepare and Sync Capacitor Android Project
         run: |
-          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+          if [ ! -d "android" ] || [ ! -f "android/gradlew" ]; then
+            echo "Android platform not found in repo checkout. Initializing Capacitor Android..."
+            npx cap add android
+          else
+            echo "Existing Android platform detected. Synchronizing assets..."
+            npx cap sync android
+          fi
 
       - name: Grant Execute Permission to gradlew
-        run: chmod +x android/gradlew
+        run: |
+          chmod +x android/gradlew
+          ls -la android/gradlew
+
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
 
       - name: Build Android Debug APK with Gradle
         run: |
           cd android
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Prepare APK Output
         run: |
