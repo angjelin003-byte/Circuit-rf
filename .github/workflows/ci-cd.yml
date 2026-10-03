@@ -50,6 +50,10 @@ jobs:
       - name: Build Production Web App
         run: npm run build
 
+      - name: Setup GitHub Pages Environment
+        if: matrix.node-version == '22.x' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: actions/configure-pages@v5
+
       - name: Upload Build Artifact
         if: matrix.node-version == '22.x' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
         uses: actions/upload-pages-artifact@v3
