@@ -224,9 +224,9 @@ export const SmithChart: React.FC<SmithChartProps> = ({
   }, [freeCursor, cx, cy, radius]);
 
   return (
-    <div className={`flex flex-col rounded-xl bg-slate-950 border border-slate-800/80 p-2.5 shadow-lg overflow-hidden select-none ${className}`}>
+    <div className={`h-full flex flex-col rounded-xl bg-slate-950 border border-slate-800/80 p-2 shadow-lg overflow-hidden select-none ${className}`}>
       {/* Top Header & Layer Toggles */}
-      <div className="flex items-center justify-between pb-1.5 border-b border-slate-800/60 text-xs">
+      <div className="flex items-center justify-between pb-1 border-b border-slate-800/60 text-xs shrink-0">
         <div className="flex items-center gap-1.5">
           <Compass className="w-3.5 h-3.5 text-sky-400" />
           <span className="font-bold tracking-wider text-slate-100 uppercase text-[10px]">Smith Chart (Z0={z0}Ω)</span>
@@ -282,15 +282,14 @@ export const SmithChart: React.FC<SmithChartProps> = ({
         </div>
       </div>
 
-      {/* SVG Smith Chart Canvas */}
+      {/* SVG Smith Chart Canvas - Flexible Viewport Fitting */}
       <div
         ref={containerRef}
-        className="relative flex items-center justify-center my-2 touch-none overflow-hidden rounded-xl bg-slate-950/60 border border-slate-900"
-        style={{ minHeight: size }}
+        className="flex-1 min-h-0 relative flex items-center justify-center my-1 touch-none overflow-hidden rounded-lg bg-slate-950/60 border border-slate-900"
       >
         <svg
           viewBox={`0 0 ${size} ${size}`}
-          className="w-full max-w-[360px] h-auto cursor-crosshair drop-shadow-md"
+          className="max-h-full max-w-full aspect-square cursor-crosshair drop-shadow-md"
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
         >
@@ -556,30 +555,30 @@ export const SmithChart: React.FC<SmithChartProps> = ({
 
       {/* Interactive Readout HUD */}
       {markerImpedance && (
-        <div className="grid grid-cols-2 gap-1.5 p-2 rounded-lg bg-slate-900/90 border border-slate-800 text-[11px]">
-          <div className="space-y-0.5">
-            <div className="text-[9px] text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <Crosshair className="w-2.5 h-2.5 text-sky-400" />
-              <span>{markerImpedance.isCustom ? 'Touch Probe' : `@ ${markerFreqMHz.toFixed(0)} MHz`}</span>
+        <div className="shrink-0 grid grid-cols-2 gap-1.5 p-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-[10px]">
+          <div className="space-y-0.5 min-w-0">
+            <div className="text-[8px] text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <Crosshair className="w-2.5 h-2.5 text-sky-400 shrink-0" />
+              <span className="truncate">{markerImpedance.isCustom ? 'Touch Probe' : `@ ${markerFreqMHz.toFixed(0)} MHz`}</span>
             </div>
-            <div className="font-mono text-xs font-bold text-sky-300">
+            <div className="font-mono text-[11px] font-bold text-sky-300 leading-tight">
               {markerImpedance.r.toFixed(1)} {markerImpedance.x >= 0 ? '+' : '-'} j{Math.abs(markerImpedance.x).toFixed(1)} Ω
             </div>
-            <div className="text-[10px] text-slate-300 font-mono">
-              Y = {markerImpedance.yRealMs.toFixed(1)} {markerImpedance.yImagMs >= 0 ? '+' : '-'} j{Math.abs(markerImpedance.yImagMs).toFixed(1)} mS
+            <div className="text-[9px] text-slate-300 font-mono truncate leading-tight">
+              Y={markerImpedance.yRealMs.toFixed(1)}{markerImpedance.yImagMs >= 0 ? '+' : '-'}j{Math.abs(markerImpedance.yImagMs).toFixed(1)}mS
             </div>
           </div>
 
-          <div className="space-y-0.5 text-right">
-            <div className="text-[9px] text-slate-400 uppercase tracking-wider">Reflection & VSWR</div>
-            <div className="font-mono text-[11px] font-semibold text-emerald-300">
+          <div className="space-y-0.5 text-right min-w-0">
+            <div className="text-[8px] text-slate-400 uppercase tracking-wider">Reflection & VSWR</div>
+            <div className="font-mono text-[10px] font-semibold text-emerald-300 leading-tight">
               |Γ|={markerImpedance.mag.toFixed(3)} ∠{markerImpedance.angDeg.toFixed(1)}°
             </div>
-            <div className="text-[10px] text-slate-300 font-mono">
+            <div className="text-[9px] text-slate-300 font-mono truncate leading-tight">
               VSWR: <span className="font-bold text-white">{markerImpedance.vswr.toFixed(2)}</span> | RL: <span className="font-bold text-white">{markerImpedance.returnLossDb.toFixed(1)}dB</span>
             </div>
             {markerImpedance.eqElem && (
-              <div className="text-[9px] text-sky-400 font-mono font-medium">
+              <div className="text-[8px] text-sky-400 font-mono font-medium truncate leading-tight">
                 Eq: {markerImpedance.eqElem}
               </div>
             )}
@@ -589,8 +588,8 @@ export const SmithChart: React.FC<SmithChartProps> = ({
 
       {/* Frequency Scrub Slider */}
       {sPoints.length > 0 && (
-        <div className="mt-1.5 pt-1 border-t border-slate-800/60 flex items-center gap-1.5">
-          <span className="text-[9px] text-slate-400 font-mono shrink-0">
+        <div className="shrink-0 mt-1 pt-0.5 border-t border-slate-800/60 flex items-center gap-1.5">
+          <span className="text-[8px] text-slate-400 font-mono shrink-0">
             {sPoints[0].freqMHz.toFixed(0)}M
           </span>
           <input
@@ -602,7 +601,7 @@ export const SmithChart: React.FC<SmithChartProps> = ({
             onChange={(e) => onMarkerFreqChange(parseFloat(e.target.value))}
             className="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer accent-sky-400"
           />
-          <span className="text-[9px] text-slate-400 font-mono shrink-0">
+          <span className="text-[8px] text-slate-400 font-mono shrink-0">
             {sPoints[sPoints.length - 1].freqMHz.toFixed(0)}M
           </span>
         </div>

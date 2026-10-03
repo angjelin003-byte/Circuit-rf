@@ -160,7 +160,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-sans selection:bg-sky-500 selection:text-white pb-14">
+    <div className="h-[100dvh] max-h-[100dvh] bg-[#070b14] text-slate-100 flex flex-col font-sans selection:bg-sky-500 selection:text-white overflow-hidden select-none pb-11">
       <OfflineIndicator />
 
       {/* Header */}
@@ -173,14 +173,14 @@ export default function App() {
       />
 
       {/* Circuit Description & Quick Center Info Banner */}
-      <div className="bg-slate-900/60 border-b border-slate-800/60 px-2.5 py-1 text-[11px]">
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
+      <div className="shrink-0 bg-slate-900/60 border-b border-slate-800/60 px-2 py-0.5 text-[10px]">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 text-slate-300 truncate">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
             <span className="truncate">{currentPreset.description}</span>
           </div>
 
-          <div className="flex items-center gap-1.5 shrink-0 font-mono text-[10px]">
+          <div className="flex items-center gap-1.5 shrink-0 font-mono text-[9px]">
             <span className="text-slate-400">
               f₀: <strong className="text-sky-300">{(markerFreqMHz / 1000).toFixed(2)}GHz</strong>
             </span>
@@ -192,8 +192,8 @@ export default function App() {
         </div>
       </div>
 
-      {/* Main View Area */}
-      <main className="flex-1 max-w-5xl w-full mx-auto p-2 sm:p-2.5 space-y-2">
+      {/* Main View Area - Strictly non-scrolling single page */}
+      <main className="flex-1 min-h-0 w-full max-w-6xl mx-auto p-1 sm:p-1.5 flex flex-col overflow-hidden">
         {/* Render Tab Views */}
         {activeTab === 'circuit-smith' && (
           <CircuitSmithPanel
@@ -212,27 +212,33 @@ export default function App() {
         )}
 
         {activeTab === 'sparams' && (
-          <SParametersView
-            sPoints={sPoints}
-            markerFreqMHz={markerFreqMHz}
-            onMarkerFreqChange={setMarkerFreqMHz}
-            z0={sweep.z0}
-          />
+          <div className="flex-1 min-h-0 overflow-y-auto">
+            <SParametersView
+              sPoints={sPoints}
+              markerFreqMHz={markerFreqMHz}
+              onMarkerFreqChange={setMarkerFreqMHz}
+              z0={sweep.z0}
+            />
+          </div>
         )}
 
         {activeTab === 'harmonic' && (
-          <HarmonicBalanceView
-            centerFreqMHz={markerFreqMHz}
-            smallSignalGainDb={
-              sPoints.find((p) => Math.abs(p.freqMHz - markerFreqMHz) < 20)?.s21MagDb ?? 14.5
-            }
-          />
+          <div className="flex-1 min-h-0 overflow-y-auto">
+            <HarmonicBalanceView
+              centerFreqMHz={markerFreqMHz}
+              smallSignalGainDb={
+                sPoints.find((p) => Math.abs(p.freqMHz - markerFreqMHz) < 20)?.s21MagDb ?? 14.5
+              }
+            />
+          </div>
         )}
 
         {activeTab === 'microstrip' && (
-          <MicrostripView
-            freqMHz={markerFreqMHz}
-          />
+          <div className="flex-1 min-h-0 overflow-y-auto">
+            <MicrostripView
+              freqMHz={markerFreqMHz}
+            />
+          </div>
         )}
       </main>
 

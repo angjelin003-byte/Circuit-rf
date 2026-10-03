@@ -37,19 +37,19 @@ export const CircuitSmithPanel: React.FC<CircuitSmithPanelProps> = ({
   const [layout, setLayout] = useState<WorkbenchLayout>('both');
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="h-full flex-1 min-h-0 flex flex-col overflow-hidden gap-1">
       {/* Workbench Subheader / View Mode Selector */}
-      <div className="flex items-center justify-between bg-slate-900/80 border border-slate-800/80 rounded-lg px-2.5 py-1 backdrop-blur-sm">
+      <div className="shrink-0 flex items-center justify-between bg-slate-900/80 border border-slate-800/80 rounded-lg px-2 py-0.5 backdrop-blur-sm">
         <div className="flex items-center gap-1.5">
           <div className="flex -space-x-1 items-center">
             <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
           </div>
-          <span className="text-[11px] font-semibold text-slate-200">
-            Interactive RF Workbench
+          <span className="text-[10px] font-semibold text-slate-200">
+            RF Workbench
           </span>
-          <span className="hidden xs:inline-block text-[9px] text-slate-400 font-mono bg-slate-800/90 px-1 py-0.2 rounded">
-            Live Smith & Schematic Sync
+          <span className="hidden xs:inline-block text-[8px] text-slate-400 font-mono bg-slate-800/90 px-1 py-0.2 rounded">
+            Smith & Schematic
           </span>
         </div>
 
@@ -58,49 +58,49 @@ export const CircuitSmithPanel: React.FC<CircuitSmithPanelProps> = ({
           <button
             onClick={() => setLayout('both')}
             title="Split View (Both Smith Chart and Schematic)"
-            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium transition-colors cursor-pointer ${
+            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-medium transition-colors cursor-pointer ${
               layout === 'both'
                 ? 'bg-sky-500/20 text-sky-300 font-semibold shadow-xs'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <SplitSquareVertical className="w-3 h-3" />
+            <SplitSquareVertical className="w-2.5 h-2.5" />
             <span>Both</span>
           </button>
 
           <button
             onClick={() => setLayout('smith')}
             title="Smith Chart Only"
-            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium transition-colors cursor-pointer ${
+            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-medium transition-colors cursor-pointer ${
               layout === 'smith'
                 ? 'bg-sky-500/20 text-sky-300 font-semibold shadow-xs'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <Compass className="w-3 h-3" />
+            <Compass className="w-2.5 h-2.5" />
             <span>Smith</span>
           </button>
 
           <button
             onClick={() => setLayout('schematic')}
             title="Schematic Only"
-            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium transition-colors cursor-pointer ${
+            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-medium transition-colors cursor-pointer ${
               layout === 'schematic'
                 ? 'bg-sky-500/20 text-sky-300 font-semibold shadow-xs'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <Sliders className="w-3 h-3" />
+            <Sliders className="w-2.5 h-2.5" />
             <span>Schematic</span>
           </button>
         </div>
       </div>
 
-      {/* Main Content Area based on Layout */}
+      {/* Main Content Area based on Layout - Locked to 100% available viewport */}
       {layout === 'both' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 items-start">
-          {/* Smith Chart - Left Column on Desktop / Top on Mobile */}
-          <div className="lg:col-span-6 w-full">
+        <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-1 overflow-hidden">
+          {/* Smith Chart - Top on Mobile / Left on Desktop */}
+          <div className="flex-1 min-h-0 h-[48%] lg:h-full lg:w-1/2 overflow-hidden">
             <SmithChart
               sPoints={sPoints}
               markerFreqMHz={markerFreqMHz}
@@ -111,8 +111,8 @@ export const CircuitSmithPanel: React.FC<CircuitSmithPanelProps> = ({
             />
           </div>
 
-          {/* Schematic & Tuner - Right Column on Desktop / Bottom on Mobile */}
-          <div className="lg:col-span-6 w-full">
+          {/* Schematic & Tuner - Bottom on Mobile / Right on Desktop */}
+          <div className="flex-1 min-h-0 h-[52%] lg:h-full lg:w-1/2 overflow-hidden">
             <SchematicView
               components={components}
               onUpdateComponent={onUpdateComponent}
@@ -126,7 +126,7 @@ export const CircuitSmithPanel: React.FC<CircuitSmithPanelProps> = ({
       )}
 
       {layout === 'smith' && (
-        <div className="w-full">
+        <div className="flex-1 min-h-0 h-full w-full overflow-hidden">
           <SmithChart
             sPoints={sPoints}
             markerFreqMHz={markerFreqMHz}
@@ -139,7 +139,7 @@ export const CircuitSmithPanel: React.FC<CircuitSmithPanelProps> = ({
       )}
 
       {layout === 'schematic' && (
-        <div className="w-full">
+        <div className="flex-1 min-h-0 h-full w-full overflow-hidden">
           <SchematicView
             components={components}
             onUpdateComponent={onUpdateComponent}
