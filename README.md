@@ -68,18 +68,16 @@ The repository includes pre-configured GitHub Actions workflows in `.github/work
   npm test        # Comprehensive RF math & simulation unit tests
   npm run build   # Production Vite PWA build
   ```
-- Automatically deploys `./dist` to **GitHub Pages** on merge to `main`.
+### Automated Android APK CI/CD (`build-apk.yml`)
+- Triggers on push to `main` / `master`, tags, or manual run via `workflow_dispatch`.
+- Automatically compiles the Android project using Gradle.
+- Generates **`circuitrf-debug.apk`** and uploads it under **GitHub Actions Artifacts** for instant download.
+- When a version tag (e.g. `v1.0.0`) is pushed, it automatically attaches `circuitrf-debug.apk` directly to GitHub Releases.
 
-### 2. `release.yml` (Automated Release Builds)
-- Triggers whenever a git version tag is pushed (e.g. `git tag v1.0.0 && git push --tags`).
-- Builds web assets and packages `circuitrf-mobile-web.tar.gz` and `.zip` archives.
-- Publishes a formal GitHub Release.
-
-### Enabling GitHub Pages Deployment:
-1. Push repository to GitHub.
-2. Go to **Settings → Pages**.
-3. Under **Build and deployment → Source**, choose **GitHub Actions**.
-4. Every push to `main` will build and publish the live web app automatically!
+### How to Download `debug.apk`:
+1. Go to your repository's **Actions** tab on GitHub.
+2. Click on the latest **Build Android APK (Debug)** workflow run.
+3. Scroll down to **Artifacts** at the bottom and download **`circuitrf-debug-apk`**.
 
 ---
 
