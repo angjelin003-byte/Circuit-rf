@@ -35,7 +35,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Install Node Dependencies
+      - name: Install Dependencies
         run: |
           if [ -f package-lock.json ]; then
             npm ci
@@ -46,13 +46,17 @@ jobs:
       - name: Build Web Application
         run: npm run build
 
-      - name: Prepare and Sync Capacitor Android Project
+      - name: Setup and Sync Capacitor Android Project
         run: |
-          if [ ! -d "android" ] || [ ! -f "android/gradlew" ]; then
-            echo "Android platform not found in repo checkout. Initializing Capacitor Android..."
+          if [ ! -d "android" ]; then
+            echo "Android directory not found in checkout. Adding Android platform..."
+            npx cap add android
+          elif [ ! -f "android/gradlew" ]; then
+            echo "android/ directory exists but gradlew is missing. Re-adding clean Android platform..."
+            rm -rf android
             npx cap add android
           else
-            echo "Existing Android platform detected. Synchronizing assets..."
+            echo "Complete Android platform found. Synchronizing assets..."
             npx cap sync android
           fi
 
