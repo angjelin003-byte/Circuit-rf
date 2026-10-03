@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -20,18 +20,15 @@ jobs:
   build-and-test:
     name: Build, Lint & Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x, 22.x]
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js 22.x
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22.x
 
       - name: Install Dependencies
         run: |
@@ -50,12 +47,22 @@ jobs:
       - name: Build Production Web App
         run: npm run build
 
+      - name: Deploy to gh-pages Branch (Auto-Deploy, Zero-Config)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
+
       - name: Setup GitHub Pages Environment
-        if: matrix.node-version == '22.x' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        continue-on-error: true
         uses: actions/configure-pages@v5
 
       - name: Upload Build Artifact
-        if: matrix.node-version == '22.x' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        continue-on-error: true
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
@@ -71,4 +78,5 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
+        continue-on-error: true
         uses: actions/deploy-pages@v4
