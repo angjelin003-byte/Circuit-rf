@@ -1,0 +1,10 @@
+{
+	"appId": "com.circuitrf.app",
+	"appName": "CircuitRF Mobile",
+	"webDir": "dist",
+	"bundledWebRuntime": false,
+	"server": {
+		"androidScheme": "https"
+	},
+	"android": {}
+}
