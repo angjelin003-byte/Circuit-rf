@@ -1,0 +1,6 @@
+{
+  "name": "CircuitRF Mobile",
+  "description": "Cross-platform mobile RF circuit & electromagnetic simulator featuring S-parameters, Harmonic Balance, Loadpull, and interactive Smith Chart.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
